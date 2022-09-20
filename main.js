@@ -1,63 +1,40 @@
-
 const productos = [
-    { nombre: 'Sorrentinos', precio: 480, porcion: '(8 unid)', },
-    { nombre: 'Ravioles', precio: 480, porcion: '(12 unid)' },
-    { nombre: 'Capelletti', precio: 480, porcion: '(12 unid)' },
-    { nombre: 'Tallarines', precio: 300, porcion: '(300gr)' },
-    { nombre: 'Cintas', precio: 300, porcion: '(300gr)' },
-    { nombre: 'Nocci', precio: 300, porcion: '(300gr)' },
+    { "id":1, "nombre": 'Sorrentinos', "precio": 480, "porcion": '(8 unid)', "img": "assets/Sorrentinos1.jpg" },
+    { "id":2, "nombre": 'Ravioles', "precio": 480, "porcion": '(12 unid)', "img": "assets/ravioles.png" },
+    { "id":3, "nombre": 'Capelletti', "precio": 480, "porcion": '(12 unid)', "img": "assets/capelletti.png" },
+    { "id":4, "nombre": 'Tallarines', "precio": 300, "porcion": '(300gr)', "img": "assets/tallarines.png" },
+    { "id":5, "nombre": 'Cintas', "precio": 300, "porcion": '(300gr)', "img": "assets/cintas.jpg" },
+    { "id":6, "nombre": 'Nocci', "precio": 300, "porcion": '(300gr)', "img": "assets/noquis.png" },
 ]
-console.log(productos);
 
-let carrito = [];
-let producto = "";
-let precio = 0;
-let seguirComprando = false;
-let cantidad = 0;
-let total = 0;
 
-do {
-    producto = prompt('Qué querés de comer?', 'Ej: Tallarines, Nocci, Cintas').toLowerCase();
-    cantidad = parseInt(prompt("Cuantas porciones querés comprar? (1 porción = 500gr)", 'Ej: 1, 2, 3'));
+const carrito = [];
 
-    switch (producto) {
-        case "tallarines":
-            precio = 600;
-            break;
+function renderizarProductos (){
 
-        case "nocci":
-            precio = 550;
-            break;
+         const tienda = document.getElementById("tienda")
+         console.log(tienda);
 
-        case "cintas":
-            precio = 600;
-            break;
-        default:
-            alert("Por favor elija una opción válida para procesar su compra");
-            precio = 0;
-            cantidad = 0;
+        productos.forEach((p) => {
+
+            let producto = document.createElement("div");
+            producto.classList.add("editElement");
+    
+            producto.innerHTML =`
+            <div class="editElement">
+            <img src="${p.img}" alt="product image">
+            <div>
+                <h2>${p.nombre}</h2>
+                <p>Precio $${p.precio}</p>
+                <button id="${p.id}"> Añadir al carrito</button>
+            </div>
+            </div>
+            `
+
+            tienda.appendChild(producto);
+
+        });
 
     }
-
-    seguirComprando = confirm("¿Querés Seguir Comprando?");
-    carrito.push({ producto, cantidad, precio });
-
-
-} while (seguirComprando);
-
-    let verCompra = prompt("Querés ver el total de tu compra?")
-    if (verCompra == "si") {
-       
-        carrito.forEach((totalCarrito) => {
-    alert(`Compraste ${totalCarrito.cantidad} porciones de ${totalCarrito.producto} por un valor total de $${totalCarrito.cantidad * totalCarrito.precio}
-    \n\nMuchas gracias por tu compra!!`)
-})
-} else {
-    alert('Gracias por tu compra')
-}
-
-
-
-
-
-
+    
+    renderizarProductos();
