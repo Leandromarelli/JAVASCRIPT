@@ -1,0 +1,28 @@
+h1{
+   text-align: center;
+}
+
+.editImg {
+    max-width: 300px;
+    max-height: 200px;
+    border-radius: 5%;   
+}
+.btnNav{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 1rem;
+    margin-top: 1rem;
+}
+.editElement{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 1rem;
+}
+.editarBoton{
+    border-radius:5px;
+    height: 30px;
+}
+
+
+
