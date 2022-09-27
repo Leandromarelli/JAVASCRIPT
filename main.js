@@ -1,3 +1,4 @@
+
 const productos = [
     { "id": 1, "nombre": 'Sorrentinos', "precio": 480, "porcion": '(8 unid)', "img": "assets/Sorrentinos1.jpg" },
     { "id": 2, "nombre": 'Ravioles', "precio": 480, "porcion": '(12 unid)', "img": "assets/ravioles.png" },
@@ -7,18 +8,27 @@ const productos = [
     { "id": 6, "nombre": 'Nocci', "precio": 300, "porcion": '(300gr)', "img": "assets/noquis.png" },
 ]
 
+document.addEventListener('DOMContentLoaded', () => {
+    renderizarProductos(productos);
 
-const carrito = [];
+    if (localStorage.getItem('carrito')) {
+        const carrito = obtenerCarritoStorage();
+        renderizarCarrito(carrito);
+        calcularTotal(carrito);
+    }
+})
 
-function renderizarProductos() {  
+const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
-    const tienda = document.getElementById("tienda")
-    
+function renderizarProductos() {
+
+    const tienda = document.getElementById('tienda')
+
 
     productos.forEach((p) => {
 
-        let producto = document.createElement("div");
-        producto.classList.add("editElement");
+        let producto = document.createElement('div');
+        producto.classList.add('editElement');
 
         producto.innerHTML = `
             <div class="card px-5 py-3 m-3 row justify-content-center bd-highlight container-fluid mx-0 p-4 border-bottom mb-4" style="background-color: #ffffff;"">
@@ -38,18 +48,21 @@ function renderizarProductos() {
 
         tienda.appendChild(producto);
 
-        producto.querySelector('button').addEventListener('click',()=>{
+        producto.querySelector('button').addEventListener('click', () => {
             agregarProductosAlCarrito(p.id);
+            // alert('agregaste una porción de '+p.nombre+' al carrito');
         })
     });
 
 }
+
+
 renderizarProductos();
 
-function agregarProductosAlCarrito(id){
-
-    let producto = productos.find(producto => producto.id === id);
+function agregarProductosAlCarrito(id) {
     
+    let producto = productos.find(producto => producto.id === id);
+
     let productoEnCarrito = carrito.find(producto => producto.id === id);
     if (productoEnCarrito) {
         productoEnCarrito.porcion++;
@@ -59,10 +72,11 @@ function agregarProductosAlCarrito(id){
 
         console.log(carrito);
     }
-
     
+
     renderizarCarrito();
-    // calcularTotal();
+    calcularTotal();
+    
 }
 
 function renderizarCarrito() {
@@ -77,38 +91,52 @@ function renderizarCarrito() {
 
         producto.innerHTML = `
                     <div class="editElement">
-                    <img src="${p.img}" alt="product image">
-                    <div>
-                        <h2>${p.nombre}</h2>
-                        <p>Precio $${p.precio}</p>
-                        <button id="${p.id}">Agregar al carrito</button>
+                         <h5>${p.nombre}</h5>
+                    <div class="editElementCarrito">
+                        <p>Precio $${p.precio} -</p>
+                        <p>Porcion/es ${p.porcion}</p>
+                        <button id="${p.id}" class="buttonCarrito">-</button>
+                        <button id="${p.id}" class="buttonCarrito">+</button>
                     </div>
+                        
                     </div>
                     `
         producto.querySelector("button").addEventListener("click", () => {
             eliminarProductosDelCarrito(index);
-        })  
+        })
 
         carritoHTML.appendChild(producto);
+        
+      
     });
 }
 
-// function eliminarProductosDelCarrito(index){
-//     carrito[index].porcion --;
-//     if(carrito[index].porcion === 0){
-//         carrito.splice(index,1);
-//     }    
-//     renderizarCarrito();
-    
-//         calcularTotal();    
-//     }
-    
-//     function calcularTotal(){
-//         let total = 0;
-//         carrito.forEach((p)=> {
-//             total += p.precio*p.porcion;
-//         })
-    
-//         document.getElementById("total");
-//         t.innerHTML = `<h4>El total es de $ ${total}</h4>`
-//     }
+function eliminarProductosDelCarrito(index) {
+    carrito[index].porcion--;
+    if (carrito[index].porcion === 0) {
+        carrito.splice(index, 1);
+    }
+    renderizarCarrito();
+
+    calcularTotal();
+}
+
+function calcularTotal() {
+    let total = 0;
+    carrito.forEach((p) => {
+        total += p.precio * p.porcion;
+    });
+
+    const t = document.getElementById('total');
+    t.innerHTML = `${total}`
+
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+  
+}
+
+
+
+const obtenerCarritoStorage = () => {
+    const carritoStorage = JSON.parse(localStorage.getItem('carrito'));
+    return carritoStorage;
+};
