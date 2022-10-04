@@ -1,11 +1,11 @@
 
 const productos = [
-    { "id": 1, "nombre": 'Sorrentinos', "precio": 480, "porcion": '(8 unid)', "img": "assets/Sorrentinos1.jpg" },
-    { "id": 2, "nombre": 'Ravioles', "precio": 480, "porcion": '(12 unid)', "img": "assets/ravioles.png" },
-    { "id": 3, "nombre": 'Capelletti', "precio": 480, "porcion": '(12 unid)', "img": "assets/capelletti.png" },
-    { "id": 4, "nombre": 'Tallarines', "precio": 300, "porcion": '(300gr)', "img": "assets/tallarines.png" },
-    { "id": 5, "nombre": 'Cintas', "precio": 300, "porcion": '(300gr)', "img": "assets/cintas.jpg" },
-    { "id": 6, "nombre": 'Nocci', "precio": 300, "porcion": '(300gr)', "img": "assets/noquis.png" },
+    { "id": 1, "nombre": 'Sorrentinos', "precio": 480, "img": "assets/Sorrentinos1.jpg" },
+    { "id": 2, "nombre": 'Ravioles', "precio": 480, "img": "assets/ravioles.png" },
+    { "id": 3, "nombre": 'Capelletti', "precio": 480, "img": "assets/capelletti.png" },
+    { "id": 4, "nombre": 'Tallarines', "precio": 300, "img": "assets/tallarines.png" },
+    { "id": 5, "nombre": 'Cintas', "precio": 300, "img": "assets/cintas.jpg" },
+    { "id": 6, "nombre": 'Nocci', "precio": 300, "img": "assets/noquis.png" },
 ]
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -25,8 +25,8 @@ function renderizarProductos() {
     const tienda = document.getElementById('tienda')
 
 
-    productos.forEach((p) => {
-
+    productos.forEach((({id, nombre, precio, img}) => {
+        
         let producto = document.createElement('div');
         producto.classList.add('editElement');
 
@@ -34,13 +34,13 @@ function renderizarProductos() {
             <div class="card px-5 py-3 m-3 row justify-content-center bd-highlight container-fluid mx-0 p-4 border-bottom mb-4" style="background-color: #ffffff;"">
                 <div class="card-body d-column-flex ml-2 border-bottom" >
                     <div>
-                        <img class="editImg" src="${p.img}" alt="product image">
+                        <img class="editImg" src="${img}" alt="product image">
                         <div class="editFlex">
-                        <h2>${p.nombre}</h2>
-                        <p>Precio $${p.precio}</p>  
+                        <h2>${nombre}</h2>
+                        <p>Precio $${precio}</p>  
                         </div>
                     </div>
-                    <button class="editarBoton" id="${p.id}">Agregar al carrito</button>
+                    <button class="editarBoton" id="${id}">Agregar al carrito</button>
                 </div>
                 
             </div>
@@ -49,33 +49,39 @@ function renderizarProductos() {
         tienda.appendChild(producto);
 
         producto.querySelector('button').addEventListener('click', () => {
-            agregarProductosAlCarrito(p.id);
-            // alert('agregaste una porción de '+p.nombre+' al carrito');
+            agregarProductosAlCarrito(id);
+           
+
         })
-    });
+    }));
 
 }
 
 
 renderizarProductos();
+  
 
 function agregarProductosAlCarrito(id) {
     
     let producto = productos.find(producto => producto.id === id);
-
     let productoEnCarrito = carrito.find(producto => producto.id === id);
-    if (productoEnCarrito) {
-        productoEnCarrito.porcion++;
-    } else {
-        producto.porcion = 1;
-        carrito.push(producto);
-
-        console.log(carrito);
-    }
     
+    // if (productoEnCarrito) {
+    //     productoEnCarrito.porcion++;
+    // } else {
+        
+    //     carrito.push({
+    //         ...producto,
+    //         porcion: 1
+    //     });
+
+    // }
+    
+    (productoEnCarrito === true)?(productoEnCarrito.porcion++):(carrito.push({...producto,porcion: 1}));
 
     renderizarCarrito();
     calcularTotal();
+
     
 }
 
@@ -140,3 +146,5 @@ const obtenerCarritoStorage = () => {
     const carritoStorage = JSON.parse(localStorage.getItem('carrito'));
     return carritoStorage;
 };
+
+
