@@ -25,8 +25,8 @@ function renderizarProductos() {
     const tienda = document.getElementById('tienda')
 
 
-    productos.forEach((({id, nombre, precio, img}) => {
-        
+    productos.forEach((({ id, nombre, precio, img }) => {
+
         let producto = document.createElement('div');
         producto.classList.add('editElement');
 
@@ -50,8 +50,6 @@ function renderizarProductos() {
 
         producto.querySelector('button').addEventListener('click', () => {
             agregarProductosAlCarrito(id);
-           
-
         })
     }));
 
@@ -59,30 +57,46 @@ function renderizarProductos() {
 
 
 renderizarProductos();
-  
+
 
 function agregarProductosAlCarrito(id) {
-    
-    let producto = productos.find(producto => producto.id === id);
-    let productoEnCarrito = carrito.find(producto => producto.id === id);
-    
-    // if (productoEnCarrito) {
-    //     productoEnCarrito.porcion++;
-    // } else {
-        
-    //     carrito.push({
-    //         ...producto,
-    //         porcion: 1
-    //     });
 
-    // }
-    
-    (productoEnCarrito === true)?(productoEnCarrito.porcion++):(carrito.push({...producto,porcion: 1}));
+    let producto = productos.find(producto => producto.id == id);
+    let productoEnCarrito = carrito.find(producto => producto.id == id);
+
+    if (productoEnCarrito) {
+        productoEnCarrito.porcion++;
+
+        // swal("Agregaste una porcion al carrito");
+        Toastify({
+            text: "Agregaste una porción al Carrito",
+            gravity: "bottom",
+            backgroundColor: "linear-gradient(to right, #000, #aaaaaa)",
+            duration: 3000,
+        }).showToast();
+    } else {
+        
+        Toastify({
+            text: "Agregaste una porción al Carrito",
+            gravity: "bottom",
+            backgroundColor:"linear-gradient(to right, #000, #aaaaaa)",
+            duration: 3000,
+        }).showToast();
+
+        carrito.push({
+            ...producto,
+            porcion: 1,
+        });
+
+
+    }
+
+    // (productoEnCarrito === true)?(productoEnCarrito.porcion++):(carrito.push({...producto,porcion: 1}));
 
     renderizarCarrito();
     calcularTotal();
 
-    
+
 }
 
 function renderizarCarrito() {
@@ -102,7 +116,7 @@ function renderizarCarrito() {
                         <p>Precio $${p.precio} -</p>
                         <p>Porcion/es ${p.porcion}</p>
                         <button id="${p.id}" class="buttonCarrito">-</button>
-                        <button id="${p.id}" class="buttonCarrito">+</button>
+                        <button id="${p.id}" class="buttonCarrito sumarProducto" value="${p.id}">+</button>
                     </div>
                         
                     </div>
@@ -111,16 +125,30 @@ function renderizarCarrito() {
             eliminarProductosDelCarrito(index);
         })
 
+        producto.querySelector(".sumarProducto").addEventListener("click", () => {
+            agregarProductosAlCarrito(index);
+
+        })
+
+
         carritoHTML.appendChild(producto);
-        
-      
+
+
     });
 }
+
 
 function eliminarProductosDelCarrito(index) {
     carrito[index].porcion--;
     if (carrito[index].porcion === 0) {
         carrito.splice(index, 1);
+        Toastify({
+            text: "Eliminaste el producto del Carrito",
+            gravity: "top",
+            position: "right",
+            backgroundColor:"linear-gradient(to right, #aaaaaa, #000)",
+            duration: 3000,
+        }).showToast();
     }
     renderizarCarrito();
 
@@ -137,7 +165,7 @@ function calcularTotal() {
     t.innerHTML = `${total}`
 
     localStorage.setItem('carrito', JSON.stringify(carrito));
-  
+
 }
 
 
