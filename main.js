@@ -1,14 +1,11 @@
 
-const productos = [
-    { "id": 1, "nombre": 'Sorrentinos', "precio": 480, "img": "assets/Sorrentinos1.jpg" },
-    { "id": 2, "nombre": 'Ravioles', "precio": 480, "img": "assets/ravioles.png" },
-    { "id": 3, "nombre": 'Capelletti', "precio": 480, "img": "assets/capelletti.png" },
-    { "id": 4, "nombre": 'Tallarines', "precio": 300, "img": "assets/tallarines.png" },
-    { "id": 5, "nombre": 'Cintas', "precio": 300, "img": "assets/cintas.jpg" },
-    { "id": 6, "nombre": 'Nocci', "precio": 300, "img": "assets/noquis.png" },
-]
+import { homeControler } from "./home/homeController";
 
-document.addEventListener('DOMContentLoaded', () => {
+
+
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const productos = await homeControler();
     renderizarProductos(productos);
 
     if (localStorage.getItem('carrito')) {
@@ -125,10 +122,12 @@ function renderizarCarrito() {
             eliminarProductosDelCarrito(index);
         })
 
-        producto.querySelector(".sumarProducto").addEventListener("click", () => {
-            agregarProductosAlCarrito(index);
 
-        })
+        producto.querySelector(".sumarProducto").addEventListener("click", () => {
+            carrito[index].porcion++;
+            renderizarCarrito();
+            calcularTotal();
+          });
 
 
         carritoHTML.appendChild(producto);
