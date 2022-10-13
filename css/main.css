@@ -3,8 +3,8 @@ h1{
 }
 
 .editImg {
-    max-width: 300px;
-    max-height: 200px;
+    width: 300px;
+    height: 230px;
     border-radius: 5%;   
 }
 .btnNav{
@@ -13,12 +13,7 @@ h1{
     margin-right: 1rem;
     margin-top: 1rem;
 }
-.editElement{
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    margin: 1rem;
-}
+
 .editarBoton{
     border-radius:5px;
     height: 30px;
@@ -36,4 +31,5 @@ h1{
 .border{
     border-top: 1px solid black;
 }
+
 
